@@ -1,24 +1,26 @@
 import express from "express";
+
 const app = express();
 const port = 3000;
 
 app.get("/", (req, res) => {
-  res.json({
-    message: "Hello World from K8s Container",
-    service: "Hello Node",
-    pod: process.env.HOSTNAME || "unknown",
-    time: new Date().toISOString(),
-  });
+    res.json({
+        message: "hello world from k8s container",
+        service: "hello node",
+        pod: process.env.POD_NAME || "unknown",
+        time: new Date().toISOString(),
+    });
 });
 
 app.get("/ready", (req, res) => {
-  res.status(200).send("Ready");
+    res.status(200).send("ready");
 });
 
 app.get("/healthy", (req, res) => {
-  res.status(200).send("OK");
+    res.status(200).send("ok done");
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
+    console.log(`Running in Pod: ${process.env.POD_NAME}`);
 });
