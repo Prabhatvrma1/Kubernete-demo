@@ -1,31 +1,58 @@
-#!/bin/bash
+$ErrorActionPreference = "Stop"
 
-set -e
+$NAME = "kubernete-demo-api"
+$USERNAME = "prabhatsoni16"
+$IMAGE = "${USERNAME}/${NAME}:latest"
 
-NAME="kubernete-demo-api"
-USERNAME="prabhatsoni16"
-IMAGE="$USERNAME/$NAME:latest"
-
-echo "Building Docker image..."
+Write-Host "====================================="
+Write-Host "Building Docker image..."
+Write-Host "====================================="
 docker build -t $IMAGE .
 
-echo "Pushing image to Docker Hub..."
+Write-Host ""
+Write-Host "====================================="
+Write-Host "Pushing image to Docker Hub..."
+Write-Host "====================================="
 docker push $IMAGE
 
-echo "Applying Kubernetes manifests..."
+Write-Host ""
+Write-Host "====================================="
+Write-Host "Applying Kubernetes manifests..."
+Write-Host "====================================="
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 
-echo "Getting Deployments..."
+Write-Host ""
+Write-Host "====================================="
+Write-Host "Waiting for deployment rollout..."
+Write-Host "====================================="
+kubectl rollout status deployment/$NAME
+
+Write-Host ""
+Write-Host "====================================="
+Write-Host "Deployments"
+Write-Host "====================================="
 kubectl get deployments
 
-echo "Getting Pods..."
+Write-Host ""
+Write-Host "====================================="
+Write-Host "Pods"
+Write-Host "====================================="
 kubectl get pods
 
-echo "Getting Services..."
-kubectl get services
+Write-Host ""
+Write-Host "====================================="
+Write-Host "Services"
+Write-Host "====================================="
+kubectl get svc
 
-echo "Fetching service details..."
-kubectl get service ${NAME}-service
+Write-Host ""
+Write-Host "====================================="
+Write-Host "Service Details"
+Write-Host "====================================="
+kubectl get svc "${NAME}-service"
 
-echo "Deployment completed successfully!"
+Write-Host ""
+Write-Host "====================================="
+Write-Host "Deployment completed successfully!"
+Write-Host "====================================="
